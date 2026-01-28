@@ -66,7 +66,7 @@
   <div class="container">
     <h1>Voto laurea LM Aero</h1>
 
-    <input type="number" id="media" placeholder="Media su 30" step="0.01" inputmode="decimal">
+    <input type="text" id="media" placeholder="Media su 30" step="0.01" inputmode="decimal">
     <br>
     <button id="calcBtn">Calcola</button>
 
@@ -97,16 +97,27 @@
     const calcBtn = document.getElementById("calcBtn");
 
     function calcolaVoto() {
-      const media = parseFloat(mediaInput.value);
-      if (isNaN(media)) {
-        resultBox.textContent = "Metti una media valida 💀";
-        return;
-      }
-      const media110 = media / 30 * 110;
-      const puntiBonus = Math.ceil(0.0909 * media110 - 2.5);
-      const voto = Math.round(media110 + puntiBonus);
-      resultBox.textContent = `Voto: ${voto} / 110`;
-    }
+  // 1. Legge il valore (es. "27,5")
+  let str = mediaInput.value;
+  
+  // 2. Sostituisce la virgola con il punto per renderlo digeribile a JS
+  let valorePulito = str.replace(',', '.');
+  
+  // 3. Converte in numero
+  const media = parseFloat(valorePulito);
+
+  if (isNaN(media) || media < 18 || media > 30) {
+    resultBox.textContent = "Media non valida! 💀";
+    return;
+  }
+
+  // Logica di calcolo (Regolamento Polito)
+  const media110 = (media / 30) * 110;
+  const puntiBonus = Math.ceil(0.0909 * media110 - 2.5);
+  const voto = Math.round(media110 + puntiBonus);
+
+  resultBox.textContent = `Voto: ${voto} / 110`;
+}
 
     calcBtn.addEventListener("click", calcolaVoto);
     mediaInput.addEventListener("keydown", e => { if(e.key === "Enter") calcolaVoto(); });
