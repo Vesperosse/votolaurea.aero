@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcolo Voto di Laurea</title>
+  <style>
+    /* ===== RESET INPUT NUMBER ===== */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    /* ===== LAYOUT ===== */
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 { font-size: 3.5rem; margin: 0; }
+    p { opacity: 0.8; margin: 20px 0 30px; }
+
+    /* ===== INPUT & BUTTON ===== */
+    input {
+      font-size: 1.2rem;
+      padding: 10px;
+      width: 200px;
+      border: none;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover { opacity: 0.9; }
+
+    #result { margin-top: 30px; font-size: 2.5rem; font-weight: bold; }
+
+    footer {
+      position: absolute;
+      bottom: 15px;
+      font-size: 1rem;
+    }
+
+    footer a { color: #fff; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Voto laurea LM Aero</h1>
+    <p>Inserisci la media e scopri il voto finale</p>
+
+    <input type="number" id="media" placeholder="Media su 30" step="0.01" inputmode="decimal">
+    <br>
+    <button id="calcBtn">Calcola</button>
+
+    <div id="result"></div>
+  </div>
+
+  <footer>
+    <a href="https://www.polito.it/sites/default/files/2025-07/Regolamento_didattico_LM_ING%20AEROSPAZIALE_25_26-1-1-1.pdf" target="_blank">
+      Più info
+    </a>
+  </footer>
+
+  <script>
+    // ===== BACKGROUND RANDOM =====
+    const colors = [
+      "#8c4aa6","#9bbf9b","#1e1e1e","#c97c5d","#3b6ea5",
+      "#b39ddb","#a5d6a7","#90caf9","#f48fb1","#ffcc80",
+      "#bcaaa4","#80cbc4","#ce93d8","#aed581","#b0bec5"
+    ];
+
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    document.body.style.backgroundColor = randomColor;
+    document.getElementById("calcBtn").style.color = randomColor;
+
+    // ===== CALCOLO VOTO =====
+    const mediaInput = document.getElementById("media");
+    const resultBox = document.getElementById("result");
+    const calcBtn = document.getElementById("calcBtn");
+
+    function calcolaVoto() {
+      const media = parseFloat(mediaInput.value);
+      if (isNaN(media)) {
+        resultBox.textContent = "Metti una media valida 💀";
+        return;
+      }
+      const media110 = media / 30 * 110;
+      const puntiBonus = Math.ceil(0.0909 * media110 - 2.5);
+      const voto = Math.round(media110 + puntiBonus);
+      resultBox.textContent = `Voto: ${voto} / 110`;
+    }
+
+    calcBtn.addEventListener("click", calcolaVoto);
+    mediaInput.addEventListener("keydown", e => { if(e.key === "Enter") calcolaVoto(); });
+  </script>
+</body>
+</html>
